@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bing.mall_back.mapper.PermissionMapper">
+
+    <select id="findByUserName" resultType="com.bing.mall_common.entity.Permission">
+
+        select p.* from permission p
+        left join role_permission rp on rp.pid = p.id
+        left join role r on r.id = rp.rid
+        left join user_role ru on r.id=ru.rid
+        left join user u on ru.uid= u.id
+        where u.username = #{userName}
+
+    </select>
+</mapper>

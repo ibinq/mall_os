@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bing.mall_back.mapper.RoleMapper">
+
+    <select id="findByUserName" resultType="com.bing.mall_common.entity.Role">
+       select r.* from role r
+        left join user_role ru on r.id=ru.rid
+        left join user u on ru.uid= u.id
+        where u.username = #{userName}
+    </select>
+</mapper>

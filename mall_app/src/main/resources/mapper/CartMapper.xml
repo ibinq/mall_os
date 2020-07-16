@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bing.mall_app.mapper.CartMapper" >
+    <update id="updateNum">
+        update cart set quantity = #{quantity} where id=#{id}
+
+    </update>
+    <update id="allChecked">
+         update cart set checked = #{checked} where user_id=#{uid}
+    </update>
+
+    <select id="selectList" resultType="com.bing.mall_app.dto.CartDTO">
+        SELECT
+            c.id ,c.quantity,c.checked ,
+            p.id product_id,p.home_image product_home_image,
+            p.title product_name,p.sub_title product_desc,
+            p.price product_price
+        FROM cart c
+        LEFT JOIN product p on c.product_id = p.id
+        WHERE user_id=#{id}
+    </select>
+    <select id="selectOne" resultType="com.bing.mall_common.entity.Cart">
+        SELECT * from cart where user_id=#{userId} and product_id=#{productId}
+
+    </select>
+    <select id="selectAllProductCount" resultType="java.lang.Integer">
+        SELECT SUM(quantity) from cart WHERE user_id=#{uid}
+    </select>
+</mapper>
+
+
+
+
+

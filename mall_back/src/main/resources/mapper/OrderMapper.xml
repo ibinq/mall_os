@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bing.mall_back.mapper.OrderMapper">
+
+
+    <select id="selectOrderList" resultType="com.bing.mall_back.dto.OrderDTO">
+        SELECT o.id,o.order_no,o.payment_time,a.`name` as username,o.payment,
+        CASE o.`status`
+	    WHEN o.`status` = 1 THEN
+		"待付款"
+		WHEN o.`status` = 2 THEN
+		"待收货"
+		WHEN o.`status` = 3 THEN
+		"已完成"
+        ELSE
+		"售后"
+        END
+        as `status_str`,o.status
+        FROM orders o
+        LEFT JOIN user u on o.user_id=u.id
+        LEFT JOIN address a on o.address_id = a.id
+        WHERE o.deleted=0
+
+
+    </select>
+</mapper>

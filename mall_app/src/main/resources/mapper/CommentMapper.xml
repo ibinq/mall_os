@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bing.mall_app.mapper.CommentMapper" >
+
+
+    <select id="selectNeedCommentCount" resultType="java.lang.Integer">
+        SELECT count(1) FROM product p
+        LEFT JOIN order_item AS oi ON p.id = oi.product_id
+        LEFT JOIN orders o ON o.id=oi.order_id
+        WHERE o.user_id=#{uid} AND o.`status`= 3
+    </select>
+    <select id="selectNeedCommentList" resultType="com.bing.mall_app.dto.ProductCommentDTO">
+        SELECT * from
+            (SELECT
+                    o.user_id uid,
+                    p.id product_id,
+                    o.id order_id ,
+                    p.title product_name,
+                    p.sub_title product_desc,
+                    p.home_image product_image
+            FROM product AS p
+            LEFT JOIN order_item AS oi ON p.id = oi.product_id
+            LEFT JOIN orders o ON o.id=oi.order_id
+            WHERE o.user_id=#{uid} and o.`status`=3) a
+        LEFT JOIN comment b on (a.product_id = b.product_id AND a.order_id = b.order_id AND a.uid = b.user_id)
+        WHERE b.product_id is NULL
+    </select>
+    <select id="selectAddCommentList" resultType="com.bing.mall_app.dto.ProductCommentDTO">
+        SELECT
+                o.user_id uid,
+                p.id product_id,
+                o.id order_id ,
+                p.title product_name,
+                p.sub_title product_desc,
+                p.home_image product_image
+        FROM product AS p
+        LEFT JOIN order_item AS oi ON p.id = oi.product_id
+        LEFT JOIN orders o ON o.id=oi.order_id
+        LEFT JOIN comment c on (c.user_id = o.user_id and c.product_id=p.id and c.order_id=o.id)
+        WHERE o.user_id=#{uid} and o.`status`=3 and c.user_id is not null
+    </select>
+</mapper>
+
+
+
+
+
